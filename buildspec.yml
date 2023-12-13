@@ -1,4 +1,8 @@
 version: 0.2
+env:
+  variables:
+    IMAGE_REPO_NAME: "720749898583.dkr.ecr.ap-northeast-1.amazonaws.com/php"
+    IMAGE_TAG: "v1"
 phases:
   pre_build:
     commands:
