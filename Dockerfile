@@ -4,5 +4,7 @@ WORKDIR /var/www/html
 
 COPY ./service /var/www/html
 
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
 ENTRYPOINT ["/usr/bin/supervisord", "-n","-c", "/etc/supervisord.conf"]
 
