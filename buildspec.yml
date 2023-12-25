@@ -2,6 +2,8 @@ version: 0.2
 env:
   variables:
     IMAGE_REPO_NAME: "720749898583.dkr.ecr.ap-northeast-1.amazonaws.com/php"
+  secrets-manager:
+    APP_KEY: dev/AppKey:APP_KEY
 phases:
   pre_build:
     commands:
@@ -9,7 +11,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - echo Running composer install in the service directory...
-      - cd service && composer install --no-dev && cp .env.example .env && cd ../
+      - cd service && composer install --no-dev && cp .env.example .env && echo "APP_KEY=$APP_KEY" >> .env && cd ../  # .env ファイルに APP_KEY を追加
   build:
     commands:
       - echo Building the Docker image for ARM architecture...
