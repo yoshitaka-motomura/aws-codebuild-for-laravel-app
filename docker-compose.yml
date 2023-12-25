@@ -11,7 +11,7 @@ services:
     depends_on:
       - php
   php:
-    image: ghcr.io/yoshitaka-motomura/php:8.2.12
+    image: 720749898583.dkr.ecr.ap-northeast-1.amazonaws.com/php:dev-test
     container_name: app
-    volumes:
-      - ./service:/var/www/html
+    # volumes:
+    #   - ./service:/var/www/html

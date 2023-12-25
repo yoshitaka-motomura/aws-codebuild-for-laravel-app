@@ -9,11 +9,11 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - echo Running composer install in the service directory...
-      - cd service && composer install --no-dev && cd ../
+      - cd service && composer install --no-dev && cp .env.example .env && cd ../
   build:
     commands:
       - echo Building the Docker image for ARM architecture...
-      - docker buildx build --platform linux/arm64 -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker buildx build --platform linux/amd64 -t $IMAGE_REPO_NAME:$IMAGE_TAG .
   post_build:
     commands:
       - echo Pushing the Docker image...

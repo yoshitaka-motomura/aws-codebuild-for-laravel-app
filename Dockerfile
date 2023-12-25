@@ -1,4 +1,4 @@
-FROM 720749898583.dkr.ecr.ap-northeast-1.amazonaws.com/php:8.2.12-arm
+FROM 720749898583.dkr.ecr.ap-northeast-1.amazonaws.com/php:8.2.13
 
 WORKDIR /var/www/html
 
