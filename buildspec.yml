@@ -2,6 +2,7 @@ version: 0.2
 env:
   variables:
     IMAGE_REPO_NAME: "720749898583.dkr.ecr.ap-northeast-1.amazonaws.com/php"
+    NGINX_IMAGE_REPO_NAME: "720749898583.dkr.ecr.ap-northeast-1.amazonaws.com/nginx"
   secrets-manager:
     APP_KEY: dev/AppKey:APP_KEY
 phases:
@@ -11,17 +12,17 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - echo Running composer install in the service directory...
-      - cd service && composer install --no-dev && cp .env.example .env && echo "APP_KEY=$APP_KEY" >> .env && cd ../
+      - cd service && composer install --no-dev && cp .env.example .env && cd ../
   build:
     commands:
-      - echo Building the Docker image for ARM architecture...
-      - docker buildx build --platform linux/amd64 -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - echo PHP Building the Docker image for AMD64 architecture...
+      - docker buildx build --platform linux/amd64 -t $IMAGE_REPO_NAME:$IMAGE_TAG . --push
+      - echo Nginx Building the Docker image for AMD64 architecture...
+      - docker buildx build --platform linux/amd64 -t $NGINX_IMAGE_REPO_NAME:$IMAGE_TAG -f NginxDockerfile . --push
   post_build:
     commands:
-      - echo Pushing the Docker image...
-      - docker push $IMAGE_REPO_NAME:$IMAGE_TAG
       - echo Writing image definitions file...
-      - printf '[{"name":"laravel-app","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' $AWS_ACCOUNT_ID $AWS_DEFAULT_REGION $IMAGE_REPO_NAME $IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"php-app","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}, {"name":"nginx-web","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' $AWS_ACCOUNT_ID $AWS_DEFAULT_REGION $IMAGE_REPO_NAME $IMAGE_TAG $AWS_ACCOUNT_ID $AWS_DEFAULT_REGION $NGINX_IMAGE_REPO_NAME $IMAGE_TAG > imagedefinitions.json
 
 artifacts:
   files: imagedefinitions.json
