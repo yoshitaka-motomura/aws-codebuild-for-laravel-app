@@ -8,6 +8,7 @@ services:
       - "80:80"
     volumes:
       - ./config/nginx/local.default.conf:/etc/nginx/conf.d/default.conf
+      - ./service:/var/www/html
   php:
     image: 720749898583.dkr.ecr.ap-northeast-1.amazonaws.com/base-php:8.2.13
     container_name: php-app
