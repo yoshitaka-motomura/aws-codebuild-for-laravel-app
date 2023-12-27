@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  web:
+    image: vue-spa:latest
+    container_name: vue
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/nginx/laravel-with-vue.conf:/etc/nginx/conf.d/default.conf
+      - ./service:/var/www/html/service
+  php:
+    image: ghcr.io/yoshitaka-motomura/php:8.2.13-arm64
+    container_name: php-app
+    volumes:
+      - ./service:/var/www/html/service
+    working_dir: /var/www/html/service
+  # composer:
+  #   image: composer:latest
+  #   container_name: composer
+  #   volumes:
+  #     - ./service:/var/www/html
+  #   working_dir: /var/www/html
+  #   command: composer install
+  #   depends_on:
+  #     - php
