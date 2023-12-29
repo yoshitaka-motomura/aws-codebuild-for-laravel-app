@@ -6,8 +6,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
+import axios from 'axios'
+
 const state = reactive({
   message: 'hello world'
+})
+
+onMounted(async()=>{
+  const result = await axios.get('/api/message').then((res)=>{
+    return res.data
+  })
+  state.message = result.message
 })
 </script>
