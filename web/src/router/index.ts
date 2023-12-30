@@ -21,12 +21,12 @@ const router = createRouter({
       path: '/demo',
       name: 'demo',
       component: () => import('../views/DemoView.vue')
-    },
-    {
-      path: '/:pathMatch(.*)*',
-      name: 'not-found',
-      redirect: { name: 'home' }
     }
+    // {
+    //   path: '/:pathMatch(.*)*',
+    //   name: 'not-found',
+    //   redirect: { name: 'home' }
+    // }
   ]
 })
 
