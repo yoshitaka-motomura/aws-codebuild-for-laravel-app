@@ -23,3 +23,8 @@ Route::get('/message', function () {
         'message' => 'Hello World! Laravel 10',
     ], 200);
 });
+
+Route::get('/config', function() {
+    $data = app('config')->get('app');
+    return response()->json($data, 200);
+});
