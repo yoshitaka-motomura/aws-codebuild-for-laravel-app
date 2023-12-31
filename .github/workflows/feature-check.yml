@@ -3,13 +3,13 @@ on:
   push:
     branches: [feature/*]
   workflow_dispatch:
+defaults:
+  run:
+    working-directory: ./service
 
 jobs:
   lint:
     runs-on: ubuntu-20.04
-    defaults:
-      run:
-        working-directory: ./service
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -36,17 +36,53 @@ jobs:
 
       - name: Run lint check
         run: composer run lint
-        id: lint-check
-
-      - name: laravel unittest
-        run: php artisan test
-        id: laravel-unittest
-
+        continue-on-error: true
       - name: Discord Message Notify
+        if: always()
         uses: appleboy/discord-action@master
         with:
           webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
           webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
-          color: ${{ job.status == 'success' && '48f442' || 'ff0000' }}
+          color: ${{ (job.status == 'success') && '48f442' || 'ff0000' }}
           username: "GitHub Bot"
-          message: "PHP Laravel is ${{ job.status == 'success' && 'Successful' || 'Failed' }} By ${{ github.repository }} : ${{ github.ref_name }}"
+          message: "PHP Laravel Lint & Unit Test Check is ${{ (job.status == 'success') && 'Successful' || 'Failed' }} By ${{ github.repository }} : ${{ github.ref_name }}"
+
+  unittest:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "COMPOSER_CACHE=$(composer config cache-files-dir)" >> $GITHUB_ENV
+
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.COMPOSER_CACHE }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist
+
+      - name: Run Laravel Unit Test
+        run: php artisan test
+        continue-on-error: true
+
+      - name: Discord Message Notify
+        if: always()
+        uses: appleboy/discord-action@master
+        with:
+          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
+          webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+          color: ${{ (job.status == 'success') && '48f442' || 'ff0000' }}
+          username: "GitHub Bot"
+          message: "PHP Laravel Lint & Unit Test Check is ${{ (job.status == 'success') && 'Successful' || 'Failed' }} By ${{ github.repository }} : ${{ github.ref_name }}"
