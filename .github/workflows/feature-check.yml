@@ -49,7 +49,7 @@ jobs:
           webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
           color: ${{ (job.status == 'success') && '48f442' || 'ff0000' }}
           username: "GitHub Bot"
-          message: "PHP Laravel Lint & Unit Test Check is ${{ (job.status == 'success') && 'Successful' || 'Failed' }} By ${{ github.repository }} : ${{ github.ref_name }}"
+          message: "PHP Laravel Lint Check is ${{ (job.status == 'success') && 'Successful' || 'Failed' }} By ${{ github.repository }} : ${{ github.ref_name }}"
 
   unittest:
     runs-on: ubuntu-20.04
@@ -89,4 +89,4 @@ jobs:
           webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
           color: ${{ (job.status == 'success') && '48f442' || 'ff0000' }}
           username: "GitHub Bot"
-          message: "PHP Laravel Lint & Unit Test Check is ${{ (job.status == 'success') && 'Successful' || 'Failed' }} By ${{ github.repository }} : ${{ github.ref_name }}"
+          message: "PHP Laravel Unit Test Check is ${{ (job.status == 'success') && 'Successful' || 'Failed' }} By ${{ github.repository }} : ${{ github.ref_name }}"
