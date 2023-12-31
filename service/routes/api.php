@@ -17,14 +17,3 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::get('/message', function () {
-    return response()->json([
-        'message' => 'Hello World! Laravel 10',
-    ], 200);
-});
-
-Route::get('/config', function() {
-    $data = app('config')->get('app');
-    return response()->json($data, 200);
-});

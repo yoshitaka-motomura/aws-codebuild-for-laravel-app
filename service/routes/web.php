@@ -13,10 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('api/demo', function () {
+    return response()->json([
+        'message' => 'Laravel 10 Demo',
+    ], 200);
+})->name('api.demo');
+
+Route::get('/api/message', function () {
+    return response()->json([
+        'message' => 'Hello World! Laravel 10',
+    ], 200);
 });
 
-Route::prefix('demo')->group(function () {
-    Route::get('/', [App\Http\Controllers\DemoController::class, 'index'])->name('demo');
+Route::get('/api/config', function() {
+    $data = app('config')->get('app');
+    return response()->json($data, 200);
 });
