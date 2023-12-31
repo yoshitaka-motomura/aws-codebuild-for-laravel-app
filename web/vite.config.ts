@@ -18,6 +18,11 @@ export default defineConfig({
         target: 'http://localhost/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
+      },
+      '/sanctum/csrf-cookie': {
+        target: 'http://localhost/sanctum/csrf-cookie',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/sanctum\/csrf-cookie/, '')
       }
     }
   }

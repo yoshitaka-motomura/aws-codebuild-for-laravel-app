@@ -1,5 +1,5 @@
 import './assets/main.css'
-
+import { AppConfig } from './config'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -10,5 +10,7 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+
+app.config.globalProperties.$config = AppConfig
 
 app.mount('#app')
