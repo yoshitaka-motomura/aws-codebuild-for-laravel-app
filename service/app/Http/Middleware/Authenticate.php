@@ -13,9 +13,10 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        if (!$request->expectsJson()) {
-            throw new \App\Exceptions\UnAuthorizedException("UnAuthorized", Response::HTTP_UNAUTHORIZED);
+        if (! $request->expectsJson()) {
+            throw new \App\Exceptions\UnAuthorizedException('UnAuthorized', Response::HTTP_UNAUTHORIZED);
         }
+
         return null;
     }
 }
