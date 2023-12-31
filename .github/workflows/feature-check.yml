@@ -2,7 +2,11 @@ name: Laravel Lint & Unit Test Check
 on:
   push:
     branches: [feature/*]
+    paths:
+      - "service/**"
+      - ".github/workflows/**"
   workflow_dispatch:
+
 defaults:
   run:
     working-directory: ./service
