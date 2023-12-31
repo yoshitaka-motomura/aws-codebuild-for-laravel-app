@@ -9,37 +9,15 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Git
-        run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'actions@github.com'
-
-      - name: Bump version and tag
+      - uses: actions/checkout@v2
+      - name: Bump version and push tag
         id: tag_version
-        uses: mathieudutour/github-tag-action@v5.6
+        uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          default_bump: patch
-          release_branches: main
-          custom_tag: |
-            if [[ "${{ github.ref }}" == "refs/heads/feature/"* ]]; then
-              echo "minor"
-            elif [[ "${{ github.ref }}" == "refs/heads/hotfix/"* ]]; then
-              echo "patch"
-            else
-              echo "false"
-            fi
-
-      - name: Create Release
-        if: steps.tag_version.outputs.new_tag != ''
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
-          draft: false
-          prerelease: false
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
