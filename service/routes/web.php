@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,19 +13,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('api/demo', function () {
-    return response()->json([
-        'message' => 'Laravel 10 Demo',
-    ], 200);
-})->name('api.demo');
+Route::middleware('auth:sanctum')->prefix('api')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    })->name('api.user');
+
+    Route::get('/demo', function () {
+        return response()->json([
+            'message' => 'auth demo',
+        ], 200);
+    })->name('api.demo');
+});
 
 Route::get('/api/message', function () {
     return response()->json([
         'message' => 'Hello World! Laravel 10',
     ], 200);
-});
-
-Route::get('/api/config', function() {
-    $data = app('config')->get('app');
-    return response()->json($data, 200);
 });
