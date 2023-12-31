@@ -38,22 +38,11 @@ jobs:
         run: composer run lint
         id: lint-check
 
-      - name: Discord Message Notify on Success
-        if: success()
+      - name: Discord Message Notify
         uses: appleboy/discord-action@master
         with:
           webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
           webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
-          color: "#48f442"
+          color: ${{ job.status == 'success' && '48f442' || 'ff0000' }}
           username: "GitHub Bot"
-          message: "Lint Check Successful"
-
-      - name: Discord Message Notify on Failure
-        if: failure()
-        uses: appleboy/discord-action@master
-        with:
-          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
-          webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
-          color: "#ff0000"
-          username: "GitHub Bot"
-          message: "Lint Check Failed"
+          message: "PHP Laravel Lint Check ${{ job.status == 'success' && 'Successful' || 'Failed' }} By ${{ github.repository }} : ${{ github.ref_name }}"
