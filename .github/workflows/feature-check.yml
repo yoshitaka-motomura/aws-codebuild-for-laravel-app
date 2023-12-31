@@ -1,4 +1,4 @@
-name: Laravel Lint Check
+name: Laravel Lint & Unit Test Check
 on:
   push:
     branches: [feature/*]
@@ -38,6 +38,10 @@ jobs:
         run: composer run lint
         id: lint-check
 
+      - name: laravel unittest
+        run: php artisan test
+        id: laravel-unittest
+
       - name: Discord Message Notify
         uses: appleboy/discord-action@master
         with:
@@ -45,4 +49,4 @@ jobs:
           webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
           color: ${{ job.status == 'success' && '48f442' || 'ff0000' }}
           username: "GitHub Bot"
-          message: "PHP Laravel Lint Check ${{ job.status == 'success' && 'Successful' || 'Failed' }} By ${{ github.repository }} : ${{ github.ref_name }}"
+          message: "PHP Laravel is ${{ job.status == 'success' && 'Successful' || 'Failed' }} By ${{ github.repository }} : ${{ github.ref_name }}"
