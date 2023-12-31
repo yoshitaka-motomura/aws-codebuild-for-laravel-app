@@ -36,11 +36,24 @@ jobs:
 
       - name: Run lint check
         run: composer run lint
-      - name: Discord Message Notify
+        id: lint-check
+
+      - name: Discord Message Notify on Success
+        if: success()
         uses: appleboy/discord-action@master
         with:
-          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID}}
+          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
           webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
           color: "#48f442"
           username: "GitHub Bot"
-          message: "Lint Check Notification"
+          message: "Lint Check Successful"
+
+      - name: Discord Message Notify on Failure
+        if: failure()
+        uses: appleboy/discord-action@master
+        with:
+          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
+          webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+          color: "#ff0000"
+          username: "GitHub Bot"
+          message: "Lint Check Failed"
