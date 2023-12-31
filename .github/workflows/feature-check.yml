@@ -36,3 +36,11 @@ jobs:
 
       - name: Run lint check
         run: composer run lint
+      - name: Discord Message Notify
+        uses: appleboy/discord-action@master
+        with:
+          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID}}
+          webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+          color: "#48f442"
+          username: "GitHub Bot"
+          message: "Lint Check Notification"
