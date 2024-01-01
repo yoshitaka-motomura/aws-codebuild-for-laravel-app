@@ -4,7 +4,7 @@
       <v-list color="transparent" nav>
           <v-list-item prepend-icon="mdi-view-dashboard" title="Home" href="/" link></v-list-item>
           <v-list-item prepend-icon="mdi-account-box" title="About" href="/about" link></v-list-item>
-          <v-list-item prepend-icon="mdi-gavel" title="Admin"></v-list-item>
+          <v-list-item prepend-icon="mdi-dna" title="Demo" href="/demo"></v-list-item>
         </v-list>
     </v-navigation-drawer>
 
