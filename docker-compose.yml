@@ -11,7 +11,7 @@ services:
       # - ./service:/var/www/html
       # - ./web/dist:/var/www/html/public
   php:
-    image: 720749898583.dkr.ecr.ap-northeast-1.amazonaws.com/base-php:8.2.13
+    image: 720749898583.dkr.ecr.ap-northeast-1.amazonaws.com/base-php:8.2.14
     container_name: php-app
     platform: linux/amd64
     volumes:
